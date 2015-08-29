@@ -1,4 +1,4 @@
-# generator-goweb [![Build Status](https://secure.travis-ci.org/nakalsio/generator-goweb.png?branch=master)](https://travis-ci.org/nakalsio/generator-goweb)
+# generator-goweb [![Build Status](https://secure.travis-ci.org/jhonghee/generator-goweb.png?branch=master)](https://travis-ci.org/jhonghee/generator-goweb)
 
 > [Yeoman](http://yeoman.io) generator
 
