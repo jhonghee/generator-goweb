@@ -24,16 +24,23 @@ module.exports = yeoman.generators.Base.extend({
     app: function() {
       var pkgname = this.props.import.split('/').reverse()[0];
       this.fs.copyTpl(
-        this.templatePath('main.go'),
+        this.templatePath('_main.go'),
         this.destinationPath('src/'+this.props.import+'/cmd/command/main.go'),
         { projectImport: this.props.import,
           packageName: pkgname}
       );
 
       this.fs.copyTpl(
-        this.templatePath('lib.go'),
+        this.templatePath('_lib.go'),
         this.destinationPath('src/'+this.props.import+'/lib.go'),
         { packageName: pkgname}
+      );
+    },
+
+    projectfiles: function() {
+      this.fs.copy(
+        this.templatePath('.gitignore'),
+        this.destinationPath('.gitignore')
       );
     }
   }
