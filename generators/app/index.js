@@ -4,54 +4,37 @@ var chalk = require('chalk');
 var yosay = require('yosay');
 
 module.exports = yeoman.generators.Base.extend({
-  prompting: function () {
+  prompting: function() {
     var done = this.async();
 
-    // Have Yeoman greet the user.
-    this.log(yosay(
-      'Welcome to the outstanding ' + chalk.red('Goweb') + ' generator!'
-    ));
-
     var prompts = [{
-      type: 'confirm',
-      name: 'someOption',
-      message: 'Would you like to enable this option?',
-      default: true
+      name: 'import',
+      message: 'What is the import path of your project?',
+      default: 'github.com/yourname/pkgname'
     }];
 
-    this.prompt(prompts, function (props) {
-      this.props = props;
-      // To access props later use this.props.someOption;
+    this.prompt(prompts, function(props){
+      this.props = props; // To access props later use this.props.import;
 
       done();
     }.bind(this));
   },
 
   writing: {
-    app: function () {
-      this.fs.copy(
-        this.templatePath('_package.json'),
-        this.destinationPath('package.json')
+    app: function() {
+      var pkgname = this.props.import.split('/').reverse()[0];
+      this.fs.copyTpl(
+        this.templatePath('main.go'),
+        this.destinationPath('src/'+this.props.import+'/cmd/command/main.go'),
+        { projectImport: this.props.import,
+          packageName: pkgname}
       );
-      this.fs.copy(
-        this.templatePath('_bower.json'),
-        this.destinationPath('bower.json')
-      );
-    },
 
-    projectfiles: function () {
-      this.fs.copy(
-        this.templatePath('editorconfig'),
-        this.destinationPath('.editorconfig')
-      );
-      this.fs.copy(
-        this.templatePath('jshintrc'),
-        this.destinationPath('.jshintrc')
+      this.fs.copyTpl(
+        this.templatePath('lib.go'),
+        this.destinationPath('src/'+this.props.import+'/lib.go'),
+        { packageName: pkgname}
       );
     }
-  },
-
-  install: function () {
-    this.installDependencies();
   }
 });
