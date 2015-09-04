@@ -21,7 +21,7 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   writing: {
-    app: function() {
+    lib: function() {
       var pkgname = this.props.import.split('/').reverse()[0];
       this.fs.copyTpl(
         this.templatePath('_main.go'),

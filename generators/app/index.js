@@ -8,5 +8,5 @@ module.exports = yeoman.generators.Base.extend({
   callBasic: function() {
     this.composeWith('goweb:lib', {});
   }
-
+  
 });
