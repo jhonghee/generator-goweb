@@ -8,6 +8,7 @@ module.exports = yeoman.generators.Base.extend({
     var done = this.async();
 
     var prompts = [{
+      type: 'input',
       name: 'import',
       message: 'What is the import path of your project?',
       default: 'github.com/yourname/pkgname'
@@ -40,8 +41,14 @@ module.exports = yeoman.generators.Base.extend({
     projectfiles: function() {
       this.fs.copy(
         this.templatePath('.gitignore'),
-        this.destinationPath('.gitignore')
+        this.destinationPath('src/'+this.props.import+'/.gitignore')
       );
+    }
+  },
+
+  end: {
+    git: function() {
+      this.spawnCommand('git', ['init', 'src/'+this.props.import]);
     }
   }
 });
