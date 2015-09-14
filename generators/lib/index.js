@@ -102,22 +102,25 @@ module.exports = yeoman.generators.Base.extend({
 
   end: {
     build: function() {
-      var isWin = /^win/.test(process.platform);
-      var build = 'build.sh';
-      if (isWin) {
-        build = 'build.cmd';
-        this.spawnCommand(build, []);
-      }
-      else {
-        var chmod = this.spawnCommand('chmod', ['+x', build]);
-        chmod.on('close', function(code){
-          if(code === 0) {
-            this.spawnCommand('./' + build, []);
-          }
-          else {
-            this.log('Failed to chmod');
-          }
-        }.bind(this));
+
+      if (this.props.organization == 1) {
+        var isWin = /^win/.test(process.platform);
+        var build = 'build.sh';
+        if (isWin) {
+          build = 'build.cmd';
+          this.spawnCommand(build, []);
+        }
+        else {
+          var chmod = this.spawnCommand('chmod', ['+x', build]);
+          chmod.on('close', function(code){
+            if(code === 0) {
+              this.spawnCommand('./' + build, []);
+            }
+            else {
+              this.log('Failed to chmod');
+            }
+          }.bind(this));
+        }
       }
     }
   }
