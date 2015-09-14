@@ -45,28 +45,26 @@ module.exports = yeoman.generators.Base.extend({
         this.destinationPath('.gitignore')
       );
 
-
-      var self = this;
       // spawn hugo new command
       var hugo = this.spawnCommand('hugo', ['new', 'site', 'site']);
       hugo.on('close', function(code){
         if(code === 0) { // Success
-          fs.appendFile(self.destinationPath('site/config.toml'), 'publishdir = "../bin/public"', function (err) {
+          fs.appendFile(this.destinationPath('site/config.toml'), 'publishdir = "../bin/public"', function (err) {
             if (err != null) {
-              self.log('Failed to append publishdir to site/config.toml: ' + err);
+              this.log('Failed to append publishdir to site/config.toml: ' + err);
             }
           });
         }
         else {
-          self.log('Failed to create hugo site');
+          this.log('Failed to create hugo site');
         }
-      });
+      }.bind(this));
     }
   },
 
-  // install: function () {
-  //   this.installDependencies();
-  // }
+   //install: function () {
+   // this.log('Possibly add go get here');
+   //}
 });
 
 
