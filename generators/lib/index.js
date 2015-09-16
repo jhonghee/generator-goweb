@@ -62,40 +62,23 @@ module.exports = yeoman.generators.Base.extend({
 
     workspace: function() {
       if (this.props.organization == 1) {
-        var isWin = /^win/.test(process.platform);
         var cwdModel = {
           cwd: this.env.cwd,
           projectImport: this.props.import
         };
         var setgoenv = 'setgoenv.sh';
         var build = 'build.sh';
-        if (isWin) {
-          setgoenv = 'setgoenv.cmd';
-          build = 'build.cmd'
-          this.fs.copyTpl(
-            this.templatePath('_setgoenv.cmd'),
-            this.destinationPath(setgoenv),
-            cwdModel
-          );
-          this.fs.copyTpl(
-            this.templatePath('_build.cmd'),
-            this.destinationPath(build),
-            cwdModel
-          );
-        }
-        else {
-          this.fs.copyTpl(
-            this.templatePath('_setgoenv.sh'),
-            this.destinationPath(setgoenv),
-            cwdModel
-          );
-          this.fs.copyTpl(
-            this.templatePath('_build.sh'),
-            this.destinationPath(build),
-            cwdModel
-          );
-        }
-        this.log('The standard workspace requires to set the GOPATH with ' + setgoenv)
+        this.fs.copyTpl(
+          this.templatePath('_setgoenv.sh'),
+          this.destinationPath(setgoenv),
+          cwdModel
+        );
+        this.fs.copyTpl(
+          this.templatePath('_build.sh'),
+          this.destinationPath(build),
+          cwdModel
+        );
+        this.log('The standard workspace requires to set the GOPATH with ' + setgoenv);
       }
     }
   },
@@ -103,14 +86,9 @@ module.exports = yeoman.generators.Base.extend({
   end: {
     build: function() {
 
-      if (this.props.organization == 1) {
-        var isWin = /^win/.test(process.platform);
-        var build = 'build.sh';
-        if (isWin) {
-          build = 'build.cmd';
-          this.spawnCommand(build, []);
-        }
-        else {
+      switch (this.props.organization) {
+        case 1:
+          var build = 'build.sh';
           var chmod = this.spawnCommand('chmod', ['+x', build]);
           chmod.on('close', function(code){
             if(code === 0) {
@@ -120,8 +98,12 @@ module.exports = yeoman.generators.Base.extend({
               this.log('Failed to chmod');
             }
           }.bind(this));
-        }
+          break;
+        case 2:
+          this.spawnCommand('git', ['init', 'src/'+this.props.import]);
+          break;
       }
+
     }
   }
 });
