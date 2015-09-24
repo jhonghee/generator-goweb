@@ -9,6 +9,10 @@ describe('goweb:lib', function () {
 
   var importPath = 'github.com/yourname/pkgname';
 
+  process.env.GOPATH="_gopath";
+
+  var destdir = process.env.GOPATH + "/src/" + importPath; // src under GOPATH
+
   before(function (done) {
     helpers.run(path.join(__dirname, '../generators/lib'))
       .withOptions({ skipInstall: true })
@@ -17,17 +21,11 @@ describe('goweb:lib', function () {
   });
 
   it('creates files', function () {
-    var isWin = /^win/.test(process.platform);
-    var setgoenv = 'setgoenv.sh';
-    if(isWin) {
-      setgoenv = 'setgoenv.cmd';
-    }
-
     assert.file([
-      'src/'+importPath+'/cmd/command/main.go',
-      'src/'+importPath+'/lib.go',
-      'src/'+importPath+'/.gitignore',
-      setgoenv
+      destdir+'/cmd/command/main.go',
+      destdir+'/lib.go',
+      destdir+'/lib_test.go',
+      destdir+'/.gitignore'
     ]);
   });
 });
