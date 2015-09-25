@@ -5,6 +5,7 @@ var yosay = require('yosay');
 
 module.exports = yeoman.generators.Base.extend({
   prompting: function() {
+
     var done = this.async();
 
     var prompts = [{
@@ -21,6 +22,12 @@ module.exports = yeoman.generators.Base.extend({
       if(!process.env.GOPATH.trim()) {
         destdir = this.destinationPath("src/" + props.import); // src under current directory
       }
+
+      // handle explicit gb project
+      if (process.argv[3] == 'gb') {
+        destdir = this.destinationPath("src/" + props.import); // src under current directory
+      }
+
       this.destdir = destdir;
 
       done();
