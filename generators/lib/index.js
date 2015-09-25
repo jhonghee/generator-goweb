@@ -25,7 +25,7 @@ module.exports = yeoman.generators.Base.extend({
 
       // handle explicit gb project
       if (process.argv[3] == 'gb') {
-        destdir = this.destinationPath("src/" + props.import); // src under current directory
+        destdir = this.destinationPath("src/" + props.import); // src under current directory]
       }
 
       this.destdir = destdir;
@@ -38,6 +38,16 @@ module.exports = yeoman.generators.Base.extend({
     lib: function() {
 
       var pkgname = this.props.import.split('/').reverse()[0];
+
+      if (process.argv[3] == 'gb') {
+        this.fs.copyTpl(
+          this.templatePath('_GoSublime.sublime-settings'),
+          this.destinationPath("GoSublime.sublime-settings"),
+          {
+            cwd: this.destinationRoot()
+          }
+        );
+      }
 
       this.fs.copyTpl(
         this.templatePath('_main.go'),
